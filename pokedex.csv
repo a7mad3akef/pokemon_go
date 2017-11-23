@@ -1,0 +1,15 @@
+ID,Name,Type1,Type2,Weight,Height,Move_name,Move_power,Evolve_to,Catch_chance
+1,Bulbsaur,grass,poison,6.9,0.7,Vine Whip,11.67,Ivysaur,1
+2,Ivysaur,grass,poison,13,1,Vine Whip,11.67,Venusaur,1
+3,Venusaur,grass,poison,100,2,Vine Whip,11.67,None,1
+4,Charmander,fire,None,8.5,0.6,Ember,10,None,1
+7,Squirtle,water,None,10.09,0.53,Bubble,10,None,1
+16,Pidgey,normal,flying,1.8,0.3,Wing Attack,10,None,1
+25,Pikachu,electric,None,7.42,0.47,Thunder Shock,8.33,None,1
+39,Jigglypuff,normal,fairy,5.5,0.5,Feint Attack,11.11,None,1
+60,Poliwag,water,None,12.4,0.6,Bubble,10,None,1
+74,Geodude,rock,ground,20,0.4,Rock Throw,13.33,None,1
+96,Drawzee,psychic,None,32.3,1,Confusion,12.5,None,1
+131,Lapras,water,ice,220,2.5,Frost Breath,11.11,None,1
+133,Eevee,normal,None,6.5,0.3,Tackle,10,None,1
+205,Forretress,bug,steel,125.8,1.2,Bug Bite,10,None,1

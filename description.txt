@@ -1,0 +1,3 @@
+Database stores user, item, and pokemon information
+
+Start game by running pokemonGo_main.py
