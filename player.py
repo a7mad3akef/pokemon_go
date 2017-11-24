@@ -87,6 +87,9 @@ class Player(object):
                    "     experience= "+str(self.experience)
         return output_str
     
+    # def __repr__(self):
+    #     return str(self)
+
     def get_password(self):
         return self.__password
     
@@ -186,7 +189,30 @@ class Player(object):
              print("You entered a wrong number! Please try again.")     
     
     def enter_battle_module(self):
-        pass
+        # pass
+        target_pokemon = database.get_pokemon()
+        print('\nWe found this random pokemon :')
+        print(target_pokemon)
+        # print(self.pokemons_in_hand)
+        prompt_message=""
+        i=1
+        for pokemon in self.pokemons_in_hand:
+            prompt_message+=str(i)+":"+pokemon.name+" (HP: "+str(pokemon.current_hp)+"/"+str(pokemon.hp)+") "
+            i+=1
+        user_selection = int(input("\nPlease choose a pokemon to use against this "+target_pokemon.name+"(enter number, 0 to go back): \n"+prompt_message+"\n"))
+        if(user_selection!=0):
+            pokemon=self.pokemons_in_hand[user_selection-1]
+            print('\nYou choosed this pokemon :')
+            print(pokemon) 
+        user_selection = int(input("\nPlease choose the type of the move ( 0 to fast 1 to sspecial ) :\n"))
+        if(user_selection == 0):
+            move = pokemon.fast_move
+        elif(user_selection == 1):
+            move = pokemon.special_move      
+        pokemon.attack(move,target_pokemon)      
+         
+
+
     
     def visit_pokestop(self):
         pass                   
@@ -271,4 +297,3 @@ class Bag(object):
             database.update_player_item(self.owner,item,-1) 
           
                 
-        

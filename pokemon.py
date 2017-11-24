@@ -82,9 +82,34 @@ class Pokemon(object):
     def attack(self, move, target_pokemon):
         """The pokemon performs an attack against target_pokemon with move"""
         damage_dealt=max(1, int(move.power*(self.cp/target_pokemon.cp)))
+
+        if (self.type1 == "fire" or self.type2 == "fire" ):
+            if (target_pokemon.type1 == "grass" or target_pokemon.type2 == "grass" ):
+                damage_dealt = 2 * damage_dealt
+                print ('damage is doubled due to the type!\n')
+            if (target_pokemon.type1 == "water" or target_pokemon.type2 == "water" ):
+                damage_dealt = .5 * damage_dealt
+                print ('damage is halved due to the type!\n')
+
+        if (self.type1 == "water" or self.type2 == "water" ):
+            if (target_pokemon.type1 == "fire" or target_pokemon.type2 == "fire" ):
+                damage_dealt = 2 * damage_dealt
+                print ('damage is doubled due to the type!\n')
+            if (target_pokemon.type1 == "grass" or target_pokemon.type2 == "grass" ):
+                damage_dealt = .5 * damage_dealt        
+                print ('damage is halved due to the type!\n')
+
+        if (self.type1 == "grass" or self.type2 == "grass" ):
+            if (target_pokemon.type1 == "water" or target_pokemon.type2 == "water" ):
+                damage_dealt = 2 * damage_dealt
+                print ('damage is doubled due to the type!\n')
+            if (target_pokemon.type1 == "fire" or target_pokemon.type2 == "fire" ):
+                damage_dealt = .5 * damage_dealt
+                print ('damage is halved due to the type!\n')                    
+
         target_pokemon.current_hp-=damage_dealt
       
-        print(self.name,"used",self.move,"against",target_pokemon.name+"!")
+        print(self.name,"used",move,"against",target_pokemon.name+"!")
         print(self.name,"dealt",str(damage_dealt),"damage to",target_pokemon.name+"!\n")
         
         if(target_pokemon.current_hp<0):

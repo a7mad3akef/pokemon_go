@@ -172,4 +172,11 @@ def insert_player_pokemon(player,pokemon):
               pokemon.sex+"')")
     conn.commit()
     conn.close()
+
+# def get_player_pokemons(player):
+#     conn = sqlite3.connect(db_name)
+#     c = conn.cursor()
+#     c.execute("SELECT * from player_pokemon WHERE player_name='"+player.username+"'")
+#     for row in c.fetchall():
+
        
