@@ -91,9 +91,19 @@ class PokeBall(Item):
             self.catch_rate = 0.85
         else:
             self.catch_rate = 0.50
+
+    def randomize_catch_chance(self,cp):
+        max = 500
+        reverse_poroportional_bias = .85 * (1-( cp / max ))
+        random_bias = .15 * random.uniform(0, 1) 
+        catch_chance =  reverse_poroportional_bias + random_bias
+        return catch_chance
             
     def invoked(self,player):
         pokemon=player.encountering_pokemon[0]
+        pokemon.catch_chance = self.randomize_catch_chance(pokemon.cp)    
+        print ('The chance of being caught',pokemon.catch_chance,'and the cp is:', pokemon.cp)
+
         print("~~~~~~~~~~~~~~~~~~~~~O~~~~~~~~~~~~~~")
         catch=random.uniform(0,1)
         if(catch<self.catch_rate*pokemon.catch_chance):
