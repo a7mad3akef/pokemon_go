@@ -10,6 +10,7 @@ def main_menu(player):
              "3: Visit PokeStop\n"+\
              "4: View items in bag\n"+\
              "5: View pokemons in hand\n"+\
+             "6: Find candies & stardut\n"+\
              "0: Save and Exit\n"
     print(menu_str)
     option=int(input())
@@ -25,6 +26,8 @@ def main_menu(player):
             print(player.bag)
         elif(option==5):
             player.list_pokemons_in_hand()
+        elif(option==6):
+            player.enter_fed_mode()    
         else:
             print("PLease only enter a number between 0~3.\n")
         option=int(input(menu_str))

@@ -188,29 +188,137 @@ class Player(object):
         else:
              print("You entered a wrong number! Please try again.")     
     
-    def enter_battle_module(self):
-        # pass
-        target_pokemon = database.get_pokemon()
-        print('\nWe found this random pokemon :')
-        print(target_pokemon)
-        # print(self.pokemons_in_hand)
+    def choose_player(self):
+        print('\nThese are the available users to to play against:')
+        persons = database.get_users()
+       
+        for i,person in enumerate(persons):
+            if (self.username == str(person[0])):
+                # print('your info is removed')
+                del persons[i]
+       
+        for i,person in enumerate(persons):
+            print(i,person[0])
+        
+        user_selection = int(input("\nPlease choose a user to play against:"))    
+       
+        if(user_selection!=0):
+            person = persons[user_selection];
+            print('\nYou choosed this person : '+person[0])
+        return person  
+
+    def user_choose_pokemon(self):
+        person = self.choose_player()    
+        pokemons = database.get_user_pokemons(person[0])
+        # target_pokemon = database.get_pokemon() 
+            
+        if(len(pokemons) > 0):
+            print('\nHere are the player pokemons:')
+            
+            for i, pokemon in enumerate(pokemons):
+                print('(name: ' +str(pokemon.name)+', cp: '+ str(pokemon.cp)+'),( default hp: '+ str(pokemon.hp)+', current hp: '+str(pokemon.current_hp)+'),( fast move: '+str(pokemon.fast_move)+ ', power: '+str(pokemon.fast_move.power) +'),( special move: ' +  str(pokemon.special_move)+',power: '+ str(pokemon.special_move.power)+')' )
+            
+            num = random.randint(0,len(pokemons)-1)
+            player_pokemon = pokemons[num]
+        
+        else:
+            print( person[0]+' has no pokemons, please choose another player')
+            person = self.choose_player()
+
+        num_move = random.randint(0,1)
+        
+        if(num_move == 0):
+            player_move = pokemon.fast_move
+        elif(num_move == 1):
+            player_move = pokemon.special_move
+        
+        return player_pokemon, player_move        
+
+    def i_choose_pokemon(self):
         prompt_message=""
         i=1
+        
         for pokemon in self.pokemons_in_hand:
             prompt_message+=str(i)+":"+pokemon.name+" (HP: "+str(pokemon.current_hp)+"/"+str(pokemon.hp)+") "
             i+=1
-        user_selection = int(input("\nPlease choose a pokemon to use against this "+target_pokemon.name+"(enter number, 0 to go back): \n"+prompt_message+"\n"))
+        
+        user_selection = int(input("\nPlease choose a pokemon to use against this (enter number, 0 to go back): \n"+prompt_message+"\n"))
+        
         if(user_selection!=0):
             pokemon=self.pokemons_in_hand[user_selection-1]
             print('\nYou choosed this pokemon :')
             print(pokemon) 
-        user_selection = int(input("\nPlease choose the type of the move ( 0 to fast 1 to sspecial ) :\n"))
+        
+        user_selection = int(input("\nPlease choose the type of the move ( 0 to fast 1 to special ) :\n"))
+        
         if(user_selection == 0):
             move = pokemon.fast_move
         elif(user_selection == 1):
-            move = pokemon.special_move      
-        pokemon.attack(move,target_pokemon)      
-         
+            move = pokemon.special_move
+
+        return pokemon, move    
+
+
+
+    def enter_battle_module(self):
+        # pass
+        result = 0
+        player_pokemon, player_move = self.user_choose_pokemon()
+        
+        print('\nThe player choosed this pokemon :')
+        print(player_pokemon)
+        # print(self.pokemons_in_hand)
+        pokemon, move = self.i_choose_pokemon()      
+        winner = pokemon
+        # result = pokemon.attack(move,player_pokemon) 
+        # result = player_pokemon.attack(player_move,pokemon) 
+        while(result == 0):
+            winner = pokemon
+            result = pokemon.attack(move,player_pokemon)
+            winner = player_pokemon
+            result = player_pokemon.attack(player_move,pokemon)
+
+        winner.new_cp = str(1.1 * winner.cp)
+        winner.cp = str(winner.cp)
+        winner.hp = str(winner.hp)
+        database.update_cp(winner)
+        print(result, winner.name,' became with cp of ' , winner.new_cp)     
+
+    def find_candies_stardust(self):
+        cp = 0
+        prompt_message="\n1: Candy\n2: Star dust"
+        user_selection = int(input("\nPlease choose the feed way"+prompt_message+"\n"))
+        if(user_selection!=0):
+            if (user_selection == 1):
+                cp = random.randint(2,20)
+                print('Candy is found with cp: ', str(cp) )
+            elif (user_selection == 2 ):
+                cp = random.randint(1,10)
+                print('Star Dust is found with cp: ', str(cp) )
+        return cp
+
+    def enter_fed_mode(self):
+        cp = self.find_candies_stardust()
+        prompt_message=""
+        i=1
+        
+        for pokemon in self.pokemons_in_hand:
+            prompt_message+=str(i)+":"+pokemon.name+" (HP: "+str(pokemon.current_hp)+"/"+str(pokemon.hp)+") "
+            i+=1
+        
+        user_selection = int(input("\nPlease choose a pokemon to feed (enter number, 0 to go back): \n"+prompt_message+"\n"))
+        
+        if(user_selection!=0):
+            pokemon=self.pokemons_in_hand[user_selection-1]
+            print('\nYou choosed this pokemon :')
+            print(pokemon)    
+            print('With cp of: ',pokemon.cp)  
+        choosed_pokemon = pokemon
+        choosed_pokemon.new_cp = str(choosed_pokemon.cp + cp )
+        choosed_pokemon.cp = str(choosed_pokemon.cp)
+        choosed_pokemon.hp = str(choosed_pokemon.hp)
+        database.update_cp(choosed_pokemon)
+        print('Your pokemon became with cp of ' , choosed_pokemon.new_cp)
 
 
     

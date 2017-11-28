@@ -1,3 +1,5 @@
+# import database
+
 class Move(object):
     """Attribute List
     name     : (string)  name of the move
@@ -17,3 +19,5 @@ class Move(object):
         
     def __str__(self):
         return self.name
+
+    

@@ -173,6 +173,54 @@ def insert_player_pokemon(player,pokemon):
     conn.commit()
     conn.close()
 
+
+def get_users():
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute("SELECT * FROM players ")
+    result = c.fetchall()
+    conn.close()
+    return result
+
+
+def get_user_pokemons(player):
+    pokemons_in_hand = []
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute("SELECT * from player_pokemon WHERE player_name='"+player+"'")
+    result = c.fetchall()
+    # print (len(result))
+ 
+    for row in result:
+        pokedex_id, player_name, fast_move_name, special_move_name, cp, hp, current_hp, weight, height, sex = row
+        c.execute("SELECT name,type_1, type_2, evolve_to, catch_chance from pokemon_meta WHERE pokedex_ID="+str(pokedex_id))        
+        pokemon_name, type1, type2, evolve_to, catch_chance=c.fetchone()
+        
+        c.execute("SELECT type,power,required_gauge from moves WHERE name='"+fast_move_name+"'")
+        type, power, gauge=c.fetchone()
+        fast_move=Move(fast_move_name,power,type, gauge)
+        
+        c.execute("SELECT type,power,required_gauge from moves WHERE name='"+special_move_name+"'")
+        type, power, gauge=c.fetchone()
+        special_move=Move(special_move_name, power, type, gauge)
+        
+        if(evolve_to=="None"):
+            pokemon=Pokemon(pokedex_id,pokemon_name,hp,cp, type1, type2, fast_move, special_move, weight, height, sex, catch_chance)
+        else:
+            
+            pokemon=EvolvablePokemon(pokedex_id,pokemon_name,hp,cp, type1, type2, fast_move, special_move, weight, height, sex, catch_chance, evolve_to)
+        pokemon.current_hp=current_hp 
+        pokemons_in_hand.append(pokemon)
+    return pokemons_in_hand
+
+def update_cp(pokemon):
+    conn = sqlite3.connect(db_name)
+    c = conn.cursor()
+    c.execute("UPDATE player_pokemon SET cp='"+pokemon.new_cp+"' WHERE cp='"+pokemon.cp+"'AND hp='"+pokemon.hp+"'")
+    print("\nDB updated.\n")
+    conn.commit()
+    conn.close()
+    
 # def get_player_pokemons(player):
 #     conn = sqlite3.connect(db_name)
 #     c = conn.cursor()

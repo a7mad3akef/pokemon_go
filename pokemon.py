@@ -82,7 +82,7 @@ class Pokemon(object):
     def attack(self, move, target_pokemon):
         """The pokemon performs an attack against target_pokemon with move"""
         damage_dealt=max(1, int(move.power*(self.cp/target_pokemon.cp)))
-
+        result = 0
         if (self.type1 == "fire" or self.type2 == "fire" ):
             if (target_pokemon.type1 == "grass" or target_pokemon.type2 == "grass" ):
                 damage_dealt = 2 * damage_dealt
@@ -108,14 +108,17 @@ class Pokemon(object):
                 print ('damage is halved due to the type!\n')                    
 
         target_pokemon.current_hp-=damage_dealt
-      
+       
         print(self.name,"used",move,"against",target_pokemon.name+"!")
         print(self.name,"dealt",str(damage_dealt),"damage to",target_pokemon.name+"!\n")
         
         if(target_pokemon.current_hp<0):
             target_pokemon.current_hp=0
             print(target_pokemon.name, "has been defeated!")
-            
+            result = 1
+
+        return result
+             
     def randomize_status(self):
         """Randomize the HP and CP of the pokemon"""
         self.cp=random.randint(10,500)
